@@ -1,0 +1,27 @@
+body{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
+
+.titulo{
+    color: #ffffff;
+    margin: 30px auto;
+    text-align: center;
+}
+
+button{
+    margin: auto;
+    padding: 10px 20px;
+    border-radius: 7px;
+    border: 1px solid white;
+    background-color: transparent;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+button:hover{
+    background-color: rgba(128, 128, 128, 0.712);
+}

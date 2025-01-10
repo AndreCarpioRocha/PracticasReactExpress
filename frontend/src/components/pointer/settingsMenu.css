@@ -1,0 +1,19 @@
+.settingsMenu{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: 20px 0px;
+}
+
+.settingsMenuOption{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+
+}
+
+.settingsMenuOption label{
+    color: white;
+    font-size: 20px;
+}
