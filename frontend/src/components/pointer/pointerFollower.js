@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import "./pointerFollower.css";
 export const PointerFollower = ({ position, opacity, background, borderColor,size }) => {
 
