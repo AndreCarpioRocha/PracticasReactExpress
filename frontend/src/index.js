@@ -4,6 +4,7 @@ import "./index.css";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import { PointerFollowerPage } from './components/pages/pointerFollowerPage';
 import { Header } from './components/header/header';
+import { MoviesPage } from './components/pages/moviesPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -13,10 +14,16 @@ root.render(
         <Route path="/" element={
           <>
             <Header></Header>
-            <h1 style={{color: "white", textAlign: "center"}}>Inicio</h1>
+            <h1 style={{ color: "white", textAlign: "center" }}>Inicio</h1>
           </>
-        
+
         } />
+
+        <Route path='/movies' element={
+          <MoviesPage></MoviesPage>
+        }></Route>
+
+
 
         <Route path="/pointerFollower" element={
           <PointerFollowerPage />
@@ -31,6 +38,8 @@ root.render(
             <h1>twitterFollowCardd</h1>
           </>
         } />
+
+
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

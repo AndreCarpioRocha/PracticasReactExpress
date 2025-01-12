@@ -4,9 +4,11 @@ export const Header = () => {
     return (
         <div className="header-pesonalizado">
             <Link to="/">Inicio</Link>
-            <Link to="/pointerFollower">Ver Pointer Follower</Link>
-            <Link to="/twitterFollowCardd">Ver twitter Follow Card </Link>
-            <Link to="/tictactoe">Ver tictactoe</Link>
+            <Link to="/pointerFollower">PointerFollower</Link>
+            <Link to="/twitterFollowCardd">Follow Card </Link>
+            <Link to="/tictactoe">Tictactoe</Link>
+            <Link to="/movies">Movies</Link>
+            
         </div>
     )
 }

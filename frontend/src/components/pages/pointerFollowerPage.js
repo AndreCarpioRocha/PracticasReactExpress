@@ -90,7 +90,7 @@ export const PointerFollowerPage = () => {
                 🔍 Select this text with your cursor to discover something interesting (Activate Pointer Follower)
             </p>
 
-            <div style={{ flex: 1, display: "flex", flexDirection: "column" }}  >
+            <div style={{  display: "flex", flexDirection: "column" }}  >
                 <button onClick={handleVisible}> {
                     visible ? "Desactivar Pointer Follower" : "Activar Pointer Follower"
                 }</button>
