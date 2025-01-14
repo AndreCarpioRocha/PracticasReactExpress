@@ -1,0 +1,31 @@
+.currentTurnDisplay{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px; 
+}
+
+.sign{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    width: 90px;
+    height: 90px;
+    border-radius: 7px;
+
+}
+
+.sign p{
+    text-align: center;
+}
+
+.sign .title{
+    font-size: 15px;
+    font-weight: bold;
+}
+.sign .simbol{
+    font-size: 30px;
+}

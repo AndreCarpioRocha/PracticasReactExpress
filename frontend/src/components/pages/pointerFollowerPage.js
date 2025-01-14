@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import "./pointerFollowerPage.css"
 import { Header } from "../header/header";
 import { SettingMenu } from "../pointer/settingsMenu";
+import { MainTitle } from "../titles/mainTitle";
+
 
 export const PointerFollowerPage = () => {
 
@@ -82,8 +84,10 @@ export const PointerFollowerPage = () => {
 
     return (
         <>
-            <Header></Header>
-            <h1 className="titulo">Pointer Follower</h1>
+            <Header></Header>           
+            
+            <MainTitle title = "Pointer Follower" ></MainTitle>
+
             <SettingMenu size={size} background={background} transparecy={transparecy} borderColor={borderColor} setBackGround={setBackGround} setBorderColor={setBorderColor} setSize={setSize} setTransperency={setTransperency}></SettingMenu>
 
             <p style={{ fontWeight: "bold", color: "#555", textAlign: "center", fontSize: "30px", margin: "200px 0px" }}>

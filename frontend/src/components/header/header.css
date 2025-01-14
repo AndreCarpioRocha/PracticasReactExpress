@@ -1,6 +1,14 @@
 .header-pesonalizado{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
+    padding: 20px 20px;
     
+}
+.header-pesonalizado a{
+    text-decoration: none;
+    padding: 4px 13px;
+}
+.header-pesonalizado .active {
+    border-bottom: 1px solid;
 }
