@@ -2,7 +2,6 @@ import { Link, useLocation } from "react-router-dom"
 import "./header.css";
 export const Header = () => {
     const location = useLocation();
-    console.log(location.pathname)
     return (
         <div className="header-pesonalizado">
             <Link to="/" className= {location.pathname === "/"? "active" :"" }>Inicio</Link>

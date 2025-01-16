@@ -1,0 +1,20 @@
+.noFoundBanner{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-items: center;
+    flex: 1;
+    gap: 20px;
+}
+
+.noFoundBanner .text{
+    font-size: 25px;
+    text-align: center;
+    
+}
+
+.noFoundBanner .image{
+    font-size: 70px;
+    text-align: center;
+    
+}
