@@ -15,10 +15,17 @@ export const MoviesPage = () => {
     const [errorInput, setErrorInput] = useState("")
     const [loading, setLoading] = useState(false)
     let lastSearch = useRef(search);
+    let idSetTimeOut = useRef(null);
+    let firstSearch = useRef(false);
 
     const handleSearch = (event) => {
         setSearch(event.target.value)
-        searchMovies(event.target.value)
+        if (idSetTimeOut.current) {
+            clearTimeout(idSetTimeOut.current)
+        }
+        idSetTimeOut.current = setTimeout(() => {
+            searchMovies(event.target.value)
+        }, 500);
     }
 
     const handleForm = (event) => {
@@ -39,6 +46,7 @@ export const MoviesPage = () => {
         lastSearch.current = search;
 
         setLoading(true);
+        firstSearch.current = true;
 
 
         fetch(`https://www.omdbapi.com/?apikey=b51b7a82&s=${search}`)
@@ -81,7 +89,8 @@ export const MoviesPage = () => {
 
             {loading ? <LoadingBanner></LoadingBanner> :
                 movies.length === 0 ?
-                    <NoFoundBanner></NoFoundBanner> :
+                    firstSearch.current ? <NoFoundBanner></NoFoundBanner> : ""
+                    :
                     <MoviesList>
                         {
                             movies.map(element => {
