@@ -1,0 +1,14 @@
+.buttonAddCard {
+    height: 100%;
+    width: 100%;
+    background-color: #ECECEC;
+    color: #2A2E31;
+    font-size: 70px;
+}
+
+.buttonAddCard:hover{
+    background-color: #e0e0e0;
+    border: none;
+    color: #2A2E31;
+    font-size: 75px;
+}
