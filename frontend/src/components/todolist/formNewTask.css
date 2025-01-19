@@ -1,0 +1,41 @@
+.formNewTask {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #202B38;
+    padding: 25px 25px;
+    border-radius: 10px;
+    width: 550px;
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.formNewTask h1 {
+    text-align: center;
+    margin: 0px;
+}
+
+.formNewTask label{
+    font-size: 17px;
+    font-weight: bold;
+}
+.formNewTask textarea{
+    flex: 1;
+}
+
+.closeFormNewTask{
+    font-size: 20px;
+    font-weight: bold;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    border-radius: 50%;
+    height: 55px;
+    width: 55px;
+    text-align: center;
+    border: none;
+}
+
