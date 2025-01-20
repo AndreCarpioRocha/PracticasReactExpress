@@ -1,19 +1,28 @@
-.taskCard{
+.taskCard {
+    display: flex;
+    flex-direction: column;
     padding: 15px;
     border-radius: 7px;
     height: 100%;
     width: 100%;
+    gap: 15px;
 
 }
 
-.taskCard  .titleCard {
+.taskCard .titleCard {
     color: rgb(61, 61, 61);
     font-weight: bold;
 
 }
 
-.taskCard  .contentCard {
+.taskCard .contentCard {
     color: rgb(61, 61, 61);
     font-weight: normal;
+
+}
+
+.containerContentCard {
+    scrollbar-color: #0c0c0c #ffffff00;
+    scrollbar-width: thin;
 
 }
