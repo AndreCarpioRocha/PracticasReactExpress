@@ -26,3 +26,13 @@
     scrollbar-width: thin;
 
 }
+
+.buttonDeleteask{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #6c757d;
+    padding: 8px;
+}
+

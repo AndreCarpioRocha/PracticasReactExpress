@@ -20,6 +20,22 @@ export const ToDoListPage = () => {
         setTaskFetch(prevElements => [...prevElements, task]);
     };
 
+    const deleteTask = (id) => {
+        try {
+            fetch(`http://localhost:4000/task/${id}`, {
+                method: "DELETE"
+            }).then(res => res.json()).then(res => {
+                if (res.response == "Task deleted") {
+                    setTaskFetch(taskFetch.filter(element => {
+                        return element._id != id
+                    }))
+                }
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         fetch("http://localhost:4000/taskList").then(res => res.json()).then(res => {
             setTaskFetch(res)
@@ -36,7 +52,7 @@ export const ToDoListPage = () => {
                 <ButtonAddCard changeVisibilityFormTask={changeVisibilityFormTask}></ButtonAddCard>
                 {taskFetch.map(element => {
                     return (
-                        <TaskCard key={element._id} title={element.title} content={element.content} color={element.color}></TaskCard>
+                        <TaskCard key={element._id} title={element.title} content={element.content} color={element.color} deleteTask={() => { deleteTask(element._id) }} ></TaskCard>
                     )
                 })}
 
@@ -44,7 +60,7 @@ export const ToDoListPage = () => {
 
             {
                 formNewTaskVisibility ?
-                    <FormNewTask changeVisibilityFormTask={changeVisibilityFormTask} addTask = {addTask}></FormNewTask> : ""
+                    <FormNewTask changeVisibilityFormTask={changeVisibilityFormTask} addTask={addTask}></FormNewTask> : ""
             }
 
         </>

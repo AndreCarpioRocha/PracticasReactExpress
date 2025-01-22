@@ -33,7 +33,7 @@ const Task = mongoose.model("tasks", taskSchema);
 app.get("/taskList", (req, res) => {
     Task.find().limit(50)
         .then(tasks => {
-            return res.status(200).json(tasks); 
+            return res.status(200).json(tasks);
         })
         .catch(err => {
             console.error(err);
@@ -65,6 +65,26 @@ app.post("/task", async (req, res) => {
         return res.type("application/json").status(200).json({ response: "Task created successfully", task: taskResponse });
     } catch (error) {
         console.log(error.message)
+        return res.status(500).json({ response: "Server Error" })
+    }
+})
+
+app.delete("/task/:_id", (req, res) => {
+    try {
+        const { _id } = req.params;
+        Task.deleteOne({ _id: _id })
+            .then(deleteRes => {
+                if (deleteRes.deletedCount == 1) {
+                    return res.status(200).json({ response: "Task deleted" })
+                }
+                return res.status(404).json({ response: "Task not found" })
+            })
+            .catch(error => {
+                console.log(error)
+                return res.status(500).json({ response: "Server Error" })
+            });
+    } catch (error) {
+        console.log(error)
         return res.status(500).json({ response: "Server Error" })
     }
 })
