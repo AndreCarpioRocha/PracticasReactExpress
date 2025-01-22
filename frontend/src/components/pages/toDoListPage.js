@@ -10,15 +10,45 @@ import { useEffect, useState } from "react"
 export const ToDoListPage = () => {
 
     const [formNewTaskVisibility, setFormNewTaskVisibility] = useState(false)
+    const [formEditTaskVisibility, setFormEditTaskVisibility] = useState(false)
     const [taskFetch, setTaskFetch] = useState([])
 
-    const changeVisibilityFormTask = () => {
+    const changeVisibilityFormNewTask = () => {
         setFormNewTaskVisibility(!formNewTaskVisibility);
     }
 
-    const addTask = (task) => {
-        setTaskFetch(prevElements => [...prevElements, task]);
-    };
+    const changeVisibilityFormEditTask = () => {
+        setFormEditTaskVisibility(!formEditTaskVisibility);
+    }
+
+    const createTask = (formData) => {
+        return new Promise((resolve, reject) => {
+            try {
+                fetch("http://localhost:4000/task", {
+                    method: "POST",
+                    headers: {
+                        "content-type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        title: formData.get("titleTask"),
+                        color: formData.get("colorTask"),
+                        content: formData.get("contenTask")
+                    })
+                }).then(res => res.json()).then(res => {
+                    if (res.task) {
+                        setTaskFetch(prevElements => [...prevElements, res.task]);
+                    }
+                }).catch(error => {
+                    console.log(error)
+                }).finally(() => {
+                    resolve("Promise execute")
+                })
+            } catch (error) {
+                reject("Fail excution")
+            }
+        })
+    }
+
 
     const deleteTask = (id) => {
         try {
@@ -36,6 +66,10 @@ export const ToDoListPage = () => {
         }
     }
 
+    const editTask = ({ id, title, content }) => {
+
+    }
+
     useEffect(() => {
         fetch("http://localhost:4000/taskList").then(res => res.json()).then(res => {
             setTaskFetch(res)
@@ -49,10 +83,12 @@ export const ToDoListPage = () => {
             <Header></Header>
             <MainTitle title="To Do List"></MainTitle>
             <ContainerTaskCards>
-                <ButtonAddCard changeVisibilityFormTask={changeVisibilityFormTask}></ButtonAddCard>
+                <ButtonAddCard changeVisibilityFormNewTask={changeVisibilityFormNewTask}></ButtonAddCard>
                 {taskFetch.map(element => {
                     return (
-                        <TaskCard key={element._id} title={element.title} content={element.content} color={element.color} deleteTask={() => { deleteTask(element._id) }} ></TaskCard>
+                        <TaskCard key={element._id} title={element.title} content={element.content} color={element.color} deleteTask={() => { deleteTask(element._id) }} editTask={() => {
+                            changeVisibilityFormEditTask()
+                        }} ></TaskCard>
                     )
                 })}
 
@@ -60,7 +96,12 @@ export const ToDoListPage = () => {
 
             {
                 formNewTaskVisibility ?
-                    <FormNewTask changeVisibilityFormTask={changeVisibilityFormTask} addTask={addTask}></FormNewTask> : ""
+                    <FormNewTask changeVisibilityForm={changeVisibilityFormNewTask} operation={createTask} titleForm={"Create New Task"} buttonFormText={"Create"}></FormNewTask> : ""
+            }
+
+            {
+                formEditTaskVisibility ?
+                    <FormNewTask changeVisibilityForm={changeVisibilityFormEditTask} operation={editTask} titleForm={"Edit Task"} buttonFormText={"Edit"}></FormNewTask> : ""
             }
 
         </>

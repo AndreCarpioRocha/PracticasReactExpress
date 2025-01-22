@@ -1,7 +1,7 @@
 import "./buttonAddCard.css"
-export const ButtonAddCard = ({changeVisibilityFormTask}) =>{
+export const ButtonAddCard = ({changeVisibilityFormNewTask}) =>{
     return (
-        <button className="buttonAddCard" onClick={changeVisibilityFormTask}>
+        <button className="buttonAddCard" onClick={changeVisibilityFormNewTask}>
           + 
         </button>
     )

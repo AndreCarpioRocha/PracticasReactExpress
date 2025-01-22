@@ -26,13 +26,21 @@
     scrollbar-width: thin;
 
 }
+.containerButtosTask{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
 
-.buttonDeleteask{
+.buttonOptionTask{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: #6c757d;
     padding: 8px;
+    margin: 0px;
 }
 
