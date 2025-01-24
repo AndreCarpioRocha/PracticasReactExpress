@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./formNewTask.css"
 
-export const FormNewTask = ({ changeVisibilityForm, operation, titleForm, buttonFormText }) => {
+export const FormNewTask = ({ task, changeVisibilityForm, operation }) => {
     const cardColors = [
         "#FFCDD2", "#F8BBD0", "#E1BEE7", "#D1C4E9", "#C5CAE9",
         "#BBDEFB", "#B3E5FC", "#B2EBF2", "#B2DFDB", "#C8E6C9",
@@ -17,11 +17,14 @@ export const FormNewTask = ({ changeVisibilityForm, operation, titleForm, button
     };
 
     const handleForm = async (event) => {
-        console.log("aaaaaa")
         event.preventDefault()
         setLoadingVisible(true)
         try {
             let form = new FormData(event.target)
+            if(task){
+                form.append("_id", task._id)
+            }
+          
             await operation(form)
         } catch (error) {
             console.log(error)
@@ -32,13 +35,14 @@ export const FormNewTask = ({ changeVisibilityForm, operation, titleForm, button
 
     return (
         <form className="formNewTask" onSubmit={handleForm}>
-            <h1> {titleForm} </h1>
+            <h1> {task ? "Edit Task" : "Create Task"} </h1>
             <label >Title</label>
-            <input type="text" name="titleTask"  required />
+            <input type="text" name="titleTask" defaultValue={task?.title || ""}  required />
+
             <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "10px", margin: "0px" }}>
                 <label>Task Color</label>
-                <select name="colorTask" onChange={handleColorChange}
-                    style={{ width: "70px", height: "23px", margin: "0px", backgroundColor: cardColors[0] }}>
+                <select name="colorTask" onChange={handleColorChange} defaultValue={task?.color || ""}
+                    style={{ width: "70px", height: "23px", margin: "0px", backgroundColor: task ? task?.color : cardColors[0] }}>
                     {cardColors.map(element => {
                         return (
                             <option key={element} value={element} style={{ backgroundColor: element }} >
@@ -50,7 +54,7 @@ export const FormNewTask = ({ changeVisibilityForm, operation, titleForm, button
             </div>
 
             <label >Content</label>
-            <textarea name="contenTask" required></textarea>
+            <textarea name="contentTask" defaultValue={task?.content || ""} required></textarea>
             <button type="button" className="closeFormNewTask" onClick={changeVisibilityForm}>✘</button>
             <button className="buttonCreateTask" disabled={loadingVisible}> {loadingVisible ?
                 <div className="loadingFormNewTask">
@@ -58,7 +62,7 @@ export const FormNewTask = ({ changeVisibilityForm, operation, titleForm, button
 
                     </div>
                 </div>
-                : ""} <p> {buttonFormText}</p></button>
+                : ""} <p>{task ? "Edit" : "Create"} </p></button>
         </form>
     )
 }

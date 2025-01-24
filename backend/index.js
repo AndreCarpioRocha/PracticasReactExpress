@@ -89,6 +89,15 @@ app.delete("/task/:_id", (req, res) => {
     }
 })
 
+app.put("/task/:_id", (req, res) => {
+    try {
+        return res.status(200).json({ response: "" })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ response: "Server Error" })
+    }
+})
+
 app.get("/", (req, res) => {
     return res.status(200)
         .set("content-type", "text/html")
