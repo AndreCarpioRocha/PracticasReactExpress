@@ -89,9 +89,41 @@ app.delete("/task/:_id", (req, res) => {
     }
 })
 
-app.put("/task/:_id", (req, res) => {
+app.put("/task/:_id", async (req, res) => {
     try {
-        return res.status(200).json({ response: "" })
+
+        const { _id } = req.params
+        const { title, content, color } = req.body
+        if (!_id) {
+            return res.status(400).json({ response: "_Id filed no found" })
+        }
+        if (!title) {
+            return res.status(400).json({ response: "title filed no found" })
+        }
+        if (!content) {
+            return res.status(400).json({ response: "content filed no found" })
+        }
+        if (!color) {
+            return res.status(400).json({ response: "color filed no found" })
+        }
+
+        const t = await Task.findById(_id);
+
+        if (t) {
+            t.title = title
+            t.content = content
+            t.color = color
+        } else {
+            return res.status(400).json({ response: "task no found" })
+        }
+
+        const resultUpdate = await t.save()
+
+        if (resultUpdate) {
+            return res.status(200).json({ response: "Task updated successfully", task: resultUpdate });
+        }
+
+        return res.status(500).json({ response: "Server Error updating" })
     } catch (error) {
         console.log(error)
         return res.status(500).json({ response: "Server Error" })

@@ -23,8 +23,7 @@ export const FormNewTask = ({ task, changeVisibilityForm, operation }) => {
             let form = new FormData(event.target)
             if(task){
                 form.append("_id", task._id)
-            }
-          
+            }          
             await operation(form)
         } catch (error) {
             console.log(error)

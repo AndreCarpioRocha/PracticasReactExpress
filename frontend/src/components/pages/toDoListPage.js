@@ -86,10 +86,11 @@ export const ToDoListPage = () => {
                 })
                     .then(res => res.json())
                     .then(res => {
+                        console.log(res)
                         if (res.task) {
                             setTaskFetch(prevElements => prevElements.map(element => {
                                 if (element._id === res.task._id) {
-                                    return res
+                                    return res.task
                                 }
                                 return element;
                             }));
