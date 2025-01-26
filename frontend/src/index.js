@@ -8,6 +8,7 @@ import { MoviesPage } from './components/pages/moviesPage';
 import { MainTitle } from './components/titles/mainTitle';
 import { TictactoePage } from './components/pages/tictactoePage';
 import { ToDoListPage } from './components/pages/toDoListPage';
+import { MineSweeperPage } from './components/pages/mineSweeperPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -45,6 +46,10 @@ root.render(
           <ToDoListPage></ToDoListPage>
         }></Route>
 
+
+        <Route path='/minesweeper' element={
+          <MineSweeperPage></MineSweeperPage>
+        }> </Route>
 
       </Routes>
     </BrowserRouter>
