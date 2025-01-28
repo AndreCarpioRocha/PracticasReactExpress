@@ -12,7 +12,7 @@ import { MineSweeperPage } from './components/pages/mineSweeperPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+
     <BrowserRouter>
       <Routes>
         <Route path="/" element={
@@ -53,7 +53,7 @@ root.render(
 
       </Routes>
     </BrowserRouter>
-  </React.StrictMode>
+
 );
 
 
