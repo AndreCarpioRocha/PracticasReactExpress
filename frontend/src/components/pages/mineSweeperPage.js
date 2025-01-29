@@ -1,5 +1,18 @@
+import { useEffect, useRef, useState } from "react"
 import { Header } from "../header/header"
 import { MainTitle } from "../titles/mainTitle"
+import HIDE_SQUARE from "../../images/imagesMineSweeper/hideSquare.png";
+import N0 from "../../images/imagesMineSweeper/void.png"
+import N1 from "../../images/imagesMineSweeper/N1.png"
+import N2 from "../../images/imagesMineSweeper/N2.png"
+import N3 from "../../images/imagesMineSweeper/N3.png"
+import N4 from "../../images/imagesMineSweeper/N4.png"
+import N5 from "../../images/imagesMineSweeper/N5.png"
+import N6 from "../../images/imagesMineSweeper/N6.png"
+import N7 from "../../images/imagesMineSweeper/N7.png"
+import N8 from "../../images/imagesMineSweeper/N8.png"
+
+import "./mineSweeperPage.css"
 
 export const MineSweeperPage = () => {
     console.log("VOLVIENDO A CARGAR COMPONENTE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
@@ -10,34 +23,54 @@ export const MineSweeperPage = () => {
         MINE: "M"
     }
 
-    let rows = 10;
-    let columns = 10
-    let minesCount = 20;
-    let mines = [];
-    //let flags = {}
-
-    
-
-
-    let board = new Array(rows).fill(null).map(() => {
-        return new Array(columns).fill(null).map(element => {
-            return {
-                status: MARKS.HIDE,
-                content: "",
-                flag: false
-            }
-        })
-    });
-
-    for (let i = 0; i < minesCount; i++) {
-        let column = (Math.floor(Math.random() * columns))
-        let row = (Math.floor(Math.random() * rows))
-        mines.push({
-            column: column, row: row
-        })
-        board[row][column].content = MARKS.MINE
-        // agregar logica si es que dos salen en la misma posicion
+    const IMAGES = {
+        N0: N0,
+        N1: N1,
+        N2: N2,
+        N3: N3,
+        N4: N4,
+        N5: N5,
+        N6: N6,
+        N7: N7,
+        N8: N8,
+        HIDE: HIDE_SQUARE,
+        VOID: "",
+        FLAG: "",
+        EXPLOTE: "",
+        FLAG_MINE: "",
     }
+
+    var boardAux = useRef(null);
+    const [rows, setRows] = useState(40)
+    const [columns, setColumns] = useState(40)
+    const [minesCount, setMinesCount] = useState(300)
+    const [mines, setMines] = useState([])
+    //let flags = {}
+    const [board, setBoard] = useState(
+        new Array(rows).fill(null).map(() => {
+            return new Array(columns).fill(null).map(element => {
+                return {
+                    status: MARKS.HIDE,
+                    content: "",
+                    flag: false
+                }
+            })
+        })
+    )
+
+    useEffect(() => {
+        let newBoard = structuredClone(board)
+        for (let i = 0; i < minesCount; i++) {
+            let column = (Math.floor(Math.random() * columns))
+            let row = (Math.floor(Math.random() * rows))
+            mines.push({
+                column: column, row: row
+            })
+            newBoard[row][column].content = MARKS.MINE
+            // agregar logica si es que dos salen en la misma posicion
+        }
+        setBoard(newBoard)
+    }, [])
 
     const printBoar = () => {
         let aux = ""
@@ -47,27 +80,25 @@ export const MineSweeperPage = () => {
             }
             aux = aux + "\n"
         }
-
         console.log(aux)
     }
 
     printBoar()
 
     const revealSquare = ({ row, column }) => {
-        console.log(`EJECUTANDO METODO  row ${row}  column : ${column} !!!!!!!!`)
-        if (board[row][column].status !== MARKS.HIDE) {
-            console.log("The square is alredy reveal")
+        if (boardAux.current[row][column].status !== MARKS.HIDE) {
+           // console.log("The square is alredy reveal")
             return
         }
 
-        if (board[row][column].flag) {
+        if (boardAux.current[row][column].flag) {
             console.log("The square has a flag")
             return
         }
 
-        board[row][column].status = MARKS.REVEAL;
+        boardAux.current[row][column].status = MARKS.REVEAL;
 
-        if (board[row][column].content === MARKS.MINE) {
+        if (boardAux.current[row][column].content === MARKS.MINE) {
             console.log("Mine pressed , Game over")
             return
         }
@@ -78,12 +109,12 @@ export const MineSweeperPage = () => {
 
         for (let i = 0; i < borderSquaresResult.length; i++) {
             const element = borderSquaresResult[i];
-            if (board[element.row][element.column].content === MARKS.MINE) {
+            if (boardAux.current[element.row][element.column].content === MARKS.MINE) {
                 borderMines++;
             }
         }
 
-        board[row][column].content = borderMines;
+        boardAux.current[row][column].content = borderMines;
 
         if (borderMines > 0) {
             return
@@ -105,15 +136,9 @@ export const MineSweeperPage = () => {
                 }
             }
         }
-        console.log(squares);
         return squares;
     };
-    
 
-    revealSquare({ row: 0, column: 0 })
-
-    printBoar()
-    
 
     return (
         <>
@@ -122,6 +147,32 @@ export const MineSweeperPage = () => {
             </Header>
 
             <MainTitle title="MineSweeper Game"></MainTitle>
+
+            <div className="boardMineSweeper">
+                {
+                    board.map((elementRow, indexRow) => {
+                        return (
+                            <div key={`row-${indexRow}`} className="row">
+                                {
+                                    elementRow.map((elementColumn, indexColumn) => {
+                                        return (
+                                            <div style={{ backgroundImage: elementColumn.status === MARKS.HIDE ? `url(${IMAGES.HIDE})` : `url(${IMAGES?.["N"+elementColumn.content]})` }} key={`row-${indexRow}-column-${indexColumn}`} className="square" onClick={() => { boardAux.current = structuredClone(board); revealSquare({ row: indexRow, column: indexColumn }); setBoard(boardAux.current); printBoar(); }}>
+                                               
+                                            </div>
+                                        )
+                                    }
+                                    )
+                                }
+                            </div>
+                        )
+                    })
+                }
+            </div>
+
+
+
+
+
         </>
     )
 

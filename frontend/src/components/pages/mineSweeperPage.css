@@ -1,0 +1,25 @@
+.boardMineSweeper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.boardMineSweeper .row {
+    display: flex;
+    flex-direction: row;
+}
+
+.boardMineSweeper .square {
+    width: 20px;
+    height: 20px;
+    border-radius: 0px;
+    cursor: pointer;
+    background-size: contain;
+    padding: 0px;
+}
+
+.boardMineSweeper .square p {
+    font-size: 10px;
+}
