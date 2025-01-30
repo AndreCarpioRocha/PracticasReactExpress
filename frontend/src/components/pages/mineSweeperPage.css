@@ -1,21 +1,34 @@
+@font-face{
+    font-family: "Digital1";
+    src: url("../../fonts/Digital1.ttf");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face{
+    font-family: "shlop";
+    src: url("../../fonts/shlop.ttf")
+}
+
 .boardContainer {
+    display: flex;
+    flex-direction: column;
     margin: 15px auto;
     padding: 5px;
     overflow-y: auto;
     overflow-x: auto;
-
     width: fit-content;
     height: fit-content;
     max-width: 80vw;
     max-height: 90vh;
     scrollbar-color: rgb(255, 255, 255) transparent;
     scrollbar-width: thin;
+    gap: 10px;
 }
 
 .boardMineSweeper {
     display: flex;
     flex-direction: column;
-
     font-size: 10px;
     /*10px es la escala incial*/
 
@@ -103,29 +116,52 @@
     color: #E20A17;
 }
 
-.boardMineSweeper .square.mine  {
+.boardMineSweeper .square.mine {
     background-image: url("../../images/imagesMineSweeper/mina.png");
     background-position: center;
     background-size: 75%;
     background-repeat: no-repeat;
-} 
+}
 
-.boardMineSweeper .square.mine.explode  {
+.boardMineSweeper .square.mine.explode {
     background-image: url("../../images/imagesMineSweeper/mina.png");
     background-position: center;
     background-size: 75%;
     background-repeat: no-repeat;
     background-color: red;
-} 
+}
 
 .boardMineSweeper .square.mine p {
     opacity: 0;
 }
 
 
-.boardMineSweeper .square.hideSquare.flag  {
+.boardMineSweeper .square.hideSquare.flag {
     background-image: url("../../images/imagesMineSweeper/flag.png");
     background-position: center;
     background-size: 45%;
     background-repeat: no-repeat;
-} 
+}
+
+.headerBoard {
+    font-family: "digital1";
+    line-height: 0.8;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    height: 60px;
+    background: rgb(90, 0, 0);
+    background: linear-gradient(0deg, rgba(90, 0, 0, 1) 0%, rgba(255, 0, 0, 1) 100%);
+    width: 100%;
+    margin: auto;
+    padding: 10px 15px;
+}
+
+.headerBoard p{
+    font-size: 47px;
+}
+.headerBoard .faceSign p{
+    font-size: 30px;
+}

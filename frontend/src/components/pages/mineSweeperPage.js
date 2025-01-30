@@ -115,7 +115,7 @@ export const MineSweeperPage = () => {
 
             for (let i = 0; i < boardAux.current.length; i++) {
                 for (let j = 0; j < boardAux.current[0].length; j++) {
-                    if (boardAux.current[i][j].content === MARKS.MINE  && !boardAux.current[i][j].flag) {
+                    if (boardAux.current[i][j].content === MARKS.MINE && !boardAux.current[i][j].flag) {
                         boardAux.current[i][j].status = MARKS.REVEAL;
                     }
                 }
@@ -190,7 +190,25 @@ export const MineSweeperPage = () => {
             <p>Board: [{rows} - {columns} ] ({rows * columns})</p>
             <p>Difficulty: {difficultySelected * 100}% mines</p>
 
+
+
+
             <div className="boardContainer">
+                <div className="headerBoard">
+                    <div className="flagsSign">
+                        <p>72</p>
+                    </div>
+
+                    <div className="faceSign">
+                        <p >😎</p>
+                    </div>
+
+                    <div className="timer">
+                        <p>
+                            00:00
+                        </p>
+                    </div>
+                </div>
                 <div className="boardMineSweeper">
                     {
                         board.map((elementRow, indexRow) => {
@@ -217,8 +235,6 @@ export const MineSweeperPage = () => {
                     }
                 </div>
             </div>
-
-
 
             <Footer></Footer>
         </>
