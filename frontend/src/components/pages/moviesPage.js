@@ -6,6 +6,7 @@ import { MoviesList } from "../movies/moviesList";
 import { useRef, useState } from "react";
 import { LoadingBanner } from "../movies/loadingBanner";
 import { NoFoundBanner } from "../movies/noFoundBanner";
+import { Footer } from "../footer/footer";
 
 
 export const MoviesPage = () => {
@@ -102,6 +103,7 @@ export const MoviesPage = () => {
                     </MoviesList>
             }
 
+            <Footer></Footer>
         </>
     )
 }

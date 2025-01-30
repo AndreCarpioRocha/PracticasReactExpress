@@ -1,8 +1,23 @@
+.boardContainer {
+    margin: 15px auto;
+    padding: 5px;
+    overflow-y: auto;
+    overflow-x: auto;
+
+    width: fit-content;
+    height: fit-content;
+    max-width: 80vw;
+    max-height: 90vh;
+    scrollbar-color: rgb(255, 255, 255) transparent;
+    scrollbar-width: thin;
+}
+
 .boardMineSweeper {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+
+    font-size: 10px;
+    /*10px es la escala incial*/
 
 }
 
@@ -12,14 +27,105 @@
 }
 
 .boardMineSweeper .square {
-    width: 20px;
-    height: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 3em;
+    min-height: 3em;
+    max-width: 3em;
+    max-height: 3em;
     border-radius: 0px;
-    cursor: pointer;
-    background-size: contain;
     padding: 0px;
+
+}
+
+.boardMineSweeper .square.hideSquare {
+    cursor: pointer;
+}
+
+.boardMineSweeper .square.hideSquare:hover {
+    scale: 1.09;
 }
 
 .boardMineSweeper .square p {
-    font-size: 10px;
+    font-size: 1.7em;
+    font-weight: bold;
+    text-align: center;
 }
+
+.boardMineSweeper .square.hideSquare {
+    background-image: linear-gradient(to bottom, #434343 0%, black 100%);
+    border: 0.2em solid #9D9D9C;
+    border-right-color: #575756;
+    border-bottom-color: #575756;
+}
+
+.boardMineSweeper .square.revealSquare {
+    background-color: #B3B2B2;
+    border: 0.2em solid #878786;
+    cursor: default;
+}
+
+.boardMineSweeper .square.N0 p {
+    opacity: 0;
+}
+
+.boardMineSweeper .square.N1 p {
+    color: #2B285E;
+}
+
+.boardMineSweeper .square.N2 p {
+    color: #0D8F38;
+}
+
+.boardMineSweeper .square.N3 p {
+    color: #E20A17;
+}
+
+.boardMineSweeper .square.N4 p {
+    color: #29265B;
+}
+
+.boardMineSweeper .square.N5 p {
+    color: #0A6734;
+}
+
+.boardMineSweeper .square.N6 p {
+    color: #BE1823;
+}
+
+.boardMineSweeper .square.N7 p {
+    color: #642682;
+}
+
+.boardMineSweeper .square.N8 p {
+    color: #E20A17;
+}
+
+.boardMineSweeper .square.mine  {
+    background-image: url("../../images/imagesMineSweeper/mina.png");
+    background-position: center;
+    background-size: 75%;
+    background-repeat: no-repeat;
+} 
+
+.boardMineSweeper .square.mine.explode  {
+    background-image: url("../../images/imagesMineSweeper/mina.png");
+    background-position: center;
+    background-size: 75%;
+    background-repeat: no-repeat;
+    background-color: red;
+} 
+
+.boardMineSweeper .square.mine p {
+    opacity: 0;
+}
+
+
+.boardMineSweeper .square.hideSquare.flag  {
+    background-image: url("../../images/imagesMineSweeper/flag.png");
+    background-position: center;
+    background-size: 45%;
+    background-repeat: no-repeat;
+} 

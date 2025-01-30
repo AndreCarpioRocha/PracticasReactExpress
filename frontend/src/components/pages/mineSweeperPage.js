@@ -1,21 +1,12 @@
 import { useEffect, useRef, useState } from "react"
 import { Header } from "../header/header"
 import { MainTitle } from "../titles/mainTitle"
-import HIDE_SQUARE from "../../images/imagesMineSweeper/hideSquare.png";
-import N0 from "../../images/imagesMineSweeper/void.png"
-import N1 from "../../images/imagesMineSweeper/N1.png"
-import N2 from "../../images/imagesMineSweeper/N2.png"
-import N3 from "../../images/imagesMineSweeper/N3.png"
-import N4 from "../../images/imagesMineSweeper/N4.png"
-import N5 from "../../images/imagesMineSweeper/N5.png"
-import N6 from "../../images/imagesMineSweeper/N6.png"
-import N7 from "../../images/imagesMineSweeper/N7.png"
-import N8 from "../../images/imagesMineSweeper/N8.png"
+
 
 import "./mineSweeperPage.css"
+import { Footer } from "../footer/footer"
 
 export const MineSweeperPage = () => {
-    console.log("VOLVIENDO A CARGAR COMPONENTE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
     const MARKS = {
         HIDE: "H",
@@ -23,71 +14,93 @@ export const MineSweeperPage = () => {
         MINE: "M"
     }
 
+    const DIFFICULTY = { // [rows x columns] % percent
+        EASY: 0.10,
+        INTERMEDIATE: 0.25,
+        HARD: 0.35
+    }
+
     const IMAGES = {
-        N0: N0,
-        N1: N1,
-        N2: N2,
-        N3: N3,
-        N4: N4,
-        N5: N5,
-        N6: N6,
-        N7: N7,
-        N8: N8,
-        HIDE: HIDE_SQUARE,
-        VOID: "",
-        FLAG: "",
-        EXPLOTE: "",
-        FLAG_MINE: "",
+
     }
 
     var boardAux = useRef(null);
-    const [rows, setRows] = useState(40)
-    const [columns, setColumns] = useState(40)
-    const [minesCount, setMinesCount] = useState(300)
-    const [mines, setMines] = useState([])
-    //let flags = {}
+    const [difficultySelected, setDifficultySelected] = useState(DIFFICULTY.EASY)
+    const [rows, setRows] = useState(20)
+    const [columns, setColumns] = useState(20)
+    const [minesCount, setMinesCount] = useState(Math.floor(rows * columns * difficultySelected))
     const [board, setBoard] = useState(
         new Array(rows).fill(null).map(() => {
             return new Array(columns).fill(null).map(element => {
                 return {
                     status: MARKS.HIDE,
                     content: "",
-                    flag: false
+                    flag: false,
+                    explode: false
                 }
             })
         })
     )
 
+    const availableSquares = (board) => {
+        let res = []
+        for (let row = 0; row < board.length; row++) {
+            for (let column = 0; column < board[0].length; column++) {
+                if (board[row][column].content !== MARKS.MINE) {
+                    res.push({ row: row, column: column })
+                }
+            }
+        }
+        return res
+    }
+
     useEffect(() => {
         let newBoard = structuredClone(board)
+        let minesLaid = 0;
+
         for (let i = 0; i < minesCount; i++) {
-            let column = (Math.floor(Math.random() * columns))
-            let row = (Math.floor(Math.random() * rows))
-            mines.push({
-                column: column, row: row
-            })
-            newBoard[row][column].content = MARKS.MINE
-            // agregar logica si es que dos salen en la misma posicion
+            let availablePositions = availableSquares(newBoard);
+            if (availablePositions.length > 0) {
+                let pos = availablePositions[Math.floor(Math.random() * availablePositions.length)]
+                newBoard[pos.row][pos.column].content = MARKS.MINE;
+                minesLaid++;
+            } else {
+                console.log(`${minesLaid} mines laid in a board of ${rows}x${columns} (${rows * columns})`)
+                setMinesCount(minesCount)
+            }
         }
+
         setBoard(newBoard)
     }, [])
 
-    const printBoar = () => {
-        let aux = ""
-        for (let row = 0; row < rows; row++) {
-            for (let column = 0; column < columns; column++) {
-                aux = aux + (board[row][column].content === "" ? " " : board[row][column].content) + "|";
+    const getClassNameSquare = (square) => {
+        if (square.status === MARKS.HIDE) {
+            if (square.flag) {
+                return "hideSquare flag"
             }
-            aux = aux + "\n"
+            return "hideSquare"
         }
-        console.log(aux)
+
+        if (square.status === MARKS.REVEAL) {
+            if (!isNaN(parseInt(square.content))) {
+                return `revealSquare N${square.content}`
+            }
+            if (square.content == MARKS.MINE) {
+                if (square.explode) {
+                    return "revealSquare mine explode"
+                }
+                return "revealSquare mine"
+            }
+        }
+        return "";
     }
 
-    printBoar()
+
+
 
     const revealSquare = ({ row, column }) => {
         if (boardAux.current[row][column].status !== MARKS.HIDE) {
-           // console.log("The square is alredy reveal")
+            // console.log("The square is alredy reveal")
             return
         }
 
@@ -99,6 +112,17 @@ export const MineSweeperPage = () => {
         boardAux.current[row][column].status = MARKS.REVEAL;
 
         if (boardAux.current[row][column].content === MARKS.MINE) {
+
+            for (let i = 0; i < boardAux.current.length; i++) {
+                for (let j = 0; j < boardAux.current[0].length; j++) {
+                    if (boardAux.current[i][j].content === MARKS.MINE  && !boardAux.current[i][j].flag) {
+                        boardAux.current[i][j].status = MARKS.REVEAL;
+                    }
+                }
+            }
+
+            boardAux.current[row][column].explode = true;
+
             console.log("Mine pressed , Game over")
             return
         }
@@ -127,6 +151,12 @@ export const MineSweeperPage = () => {
 
     }
 
+    const pressSquare = (indexRow, indexColumn) => {
+        boardAux.current = structuredClone(board);
+        revealSquare({ row: indexRow, column: indexColumn });
+        setBoard(boardAux.current);
+    }
+
     const borderSquares = ({ row, column }) => {
         let squares = [];
         for (let i = Math.max(0, row - 1); i <= Math.min(row + 1, rows - 1); i++) {
@@ -139,6 +169,14 @@ export const MineSweeperPage = () => {
         return squares;
     };
 
+    const layFlag = (indexRow, indexColumn) => {
+        if (board[indexRow][indexColumn].status == MARKS.HIDE) {
+            let newBoard = structuredClone(board)
+            newBoard[indexRow][indexColumn].flag = !newBoard[indexRow][indexColumn].flag
+            setBoard(newBoard)
+        }
+    }
+
 
     return (
         <>
@@ -148,31 +186,41 @@ export const MineSweeperPage = () => {
 
             <MainTitle title="MineSweeper Game"></MainTitle>
 
-            <div className="boardMineSweeper">
-                {
-                    board.map((elementRow, indexRow) => {
-                        return (
-                            <div key={`row-${indexRow}`} className="row">
-                                {
-                                    elementRow.map((elementColumn, indexColumn) => {
-                                        return (
-                                            <div style={{ backgroundImage: elementColumn.status === MARKS.HIDE ? `url(${IMAGES.HIDE})` : `url(${IMAGES?.["N"+elementColumn.content]})` }} key={`row-${indexRow}-column-${indexColumn}`} className="square" onClick={() => { boardAux.current = structuredClone(board); revealSquare({ row: indexRow, column: indexColumn }); setBoard(boardAux.current); printBoar(); }}>
-                                               
-                                            </div>
+            <p>Mines: {minesCount} </p>
+            <p>Board: [{rows} - {columns} ] ({rows * columns})</p>
+            <p>Difficulty: {difficultySelected * 100}% mines</p>
+
+            <div className="boardContainer">
+                <div className="boardMineSweeper">
+                    {
+                        board.map((elementRow, indexRow) => {
+                            return (
+                                <div key={`row-${indexRow}`} className="row">
+                                    {
+                                        elementRow.map((elementColumn, indexColumn) => {
+                                            return (
+                                                <div
+                                                    key={`row-${indexRow}-column-${indexColumn}`}
+                                                    className={"square " + getClassNameSquare(elementColumn)}
+                                                    onClick={() => { pressSquare(indexRow, indexColumn) }}
+                                                    onContextMenu={(e) => { e.preventDefault(); layFlag(indexRow, indexColumn); }}
+                                                >
+                                                    <p>{elementColumn.status === MARKS.REVEAL ? elementColumn.content : ""}</p>
+                                                </div>
+                                            )
+                                        }
                                         )
                                     }
-                                    )
-                                }
-                            </div>
-                        )
-                    })
-                }
+                                </div>
+                            )
+                        })
+                    }
+                </div>
             </div>
 
 
 
-
-
+            <Footer></Footer>
         </>
     )
 
