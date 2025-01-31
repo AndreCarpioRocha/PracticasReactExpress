@@ -5,6 +5,7 @@ import { MainTitle } from "../titles/mainTitle"
 
 import "./mineSweeperPage.css"
 import { Footer } from "../footer/footer"
+import { ResulBanner } from "../tictactoe/resultBanner"
 
 export const MineSweeperPage = () => {
 
@@ -24,7 +25,9 @@ export const MineSweeperPage = () => {
 
     }
 
-    var boardAux = useRef(null);
+
+    var boardAux = useRef(null)
+    const [gameOver, setGameOver] = useState(false)
     const [difficultySelected, setDifficultySelected] = useState(DIFFICULTY.EASY)
     const [rows, setRows] = useState(20)
     const [columns, setColumns] = useState(20)
@@ -41,6 +44,10 @@ export const MineSweeperPage = () => {
             })
         })
     )
+
+    const [bannerResult, setResultBanner] = useState(false)
+    const [bannerResultTitle, setBannerResultTitle] = useState("")
+    const [bannerResultSimbol, setBannerResultSimbol] = useState("")
 
     const availableSquares = (board) => {
         let res = []
@@ -122,7 +129,10 @@ export const MineSweeperPage = () => {
             }
 
             boardAux.current[row][column].explode = true;
-
+            setGameOver(true)
+            setResultBanner(true);
+            setBannerResultTitle("GAME OVER")
+            setBannerResultSimbol("😟")
             console.log("Mine pressed , Game over")
             return
         }
@@ -152,6 +162,7 @@ export const MineSweeperPage = () => {
     }
 
     const pressSquare = (indexRow, indexColumn) => {
+        if(gameOver){return}
         boardAux.current = structuredClone(board);
         revealSquare({ row: indexRow, column: indexColumn });
         setBoard(boardAux.current);
@@ -170,11 +181,17 @@ export const MineSweeperPage = () => {
     };
 
     const layFlag = (indexRow, indexColumn) => {
+        if(gameOver){return}
         if (board[indexRow][indexColumn].status == MARKS.HIDE) {
             let newBoard = structuredClone(board)
             newBoard[indexRow][indexColumn].flag = !newBoard[indexRow][indexColumn].flag
             setBoard(newBoard)
         }
+    }
+
+    const gameOverBanner = () =>{
+        console.log("GAME OVER !!!!!!!!!!!!!!!!")
+        return
     }
 
 
@@ -196,7 +213,7 @@ export const MineSweeperPage = () => {
             <div className="boardContainer">
                 <div className="headerBoard">
                     <div className="flagsSign">
-                        <p>72</p>
+                        <p>{minesCount}</p>
                     </div>
 
                     <div className="faceSign">
@@ -235,6 +252,8 @@ export const MineSweeperPage = () => {
                     }
                 </div>
             </div>
+
+            <ResulBanner title = {bannerResultTitle} simbol = {bannerResultSimbol}  visibleBanner = {bannerResult}  setVisibleBanner = {setResultBanner} ></ResulBanner>
 
             <Footer></Footer>
         </>
