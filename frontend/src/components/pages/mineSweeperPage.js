@@ -21,31 +21,17 @@ export const MineSweeperPage = () => {
         HARD: 0.35
     }
 
-    const IMAGES = {
-
-    }
-
-
     var boardAux = useRef(null)
-    const [gameOver, setGameOver] = useState(false)
-    const [difficultySelected, setDifficultySelected] = useState(DIFFICULTY.EASY)
-    const [rows, setRows] = useState(20)
-    const [columns, setColumns] = useState(20)
-    const [minesCount, setMinesCount] = useState(Math.floor(rows * columns * difficultySelected))
-    const [board, setBoard] = useState(
-        new Array(rows).fill(null).map(() => {
-            return new Array(columns).fill(null).map(element => {
-                return {
-                    status: MARKS.HIDE,
-                    content: "",
-                    flag: false,
-                    explode: false
-                }
-            })
-        })
-    )
+    const gameFinished = useRef(false);
 
-    const [bannerResult, setResultBanner] = useState(false)
+    const [difficultySelected, setDifficultySelected] = useState(DIFFICULTY.EASY)
+    const [rows, setRows] = useState(10)
+    const [columns, setColumns] = useState(10)
+    const [minesCount, setMinesCount] = useState(Math.floor(rows * columns * difficultySelected))
+    const [board, setBoard] = useState(null)
+    const [availableFlags, setAvailableFlags] = useState(0);
+
+    const [bannerResult, setBannerResult] = useState(false)
     const [bannerResultTitle, setBannerResultTitle] = useState("")
     const [bannerResultSimbol, setBannerResultSimbol] = useState("")
 
@@ -61,10 +47,18 @@ export const MineSweeperPage = () => {
         return res
     }
 
-    useEffect(() => {
-        let newBoard = structuredClone(board)
+    const placeMines = () => {
+        let newBoard = new Array(rows).fill(null).map(() => {
+            return new Array(columns).fill(null).map(element => {
+                return {
+                    status: MARKS.HIDE,
+                    content: "",
+                    flag: false,
+                    explode: false
+                }
+            })
+        })
         let minesLaid = 0;
-
         for (let i = 0; i < minesCount; i++) {
             let availablePositions = availableSquares(newBoard);
             if (availablePositions.length > 0) {
@@ -73,11 +67,15 @@ export const MineSweeperPage = () => {
                 minesLaid++;
             } else {
                 console.log(`${minesLaid} mines laid in a board of ${rows}x${columns} (${rows * columns})`)
-                setMinesCount(minesCount)
+                setMinesCount(minesLaid)
             }
         }
-
+        setAvailableFlags(minesLaid)
         setBoard(newBoard)
+    }
+
+    useEffect(() => {
+        placeMines()
     }, [])
 
     const getClassNameSquare = (square) => {
@@ -92,7 +90,7 @@ export const MineSweeperPage = () => {
             if (!isNaN(parseInt(square.content))) {
                 return `revealSquare N${square.content}`
             }
-            if (square.content == MARKS.MINE) {
+            if (square.content === MARKS.MINE) {
                 if (square.explode) {
                     return "revealSquare mine explode"
                 }
@@ -129,11 +127,10 @@ export const MineSweeperPage = () => {
             }
 
             boardAux.current[row][column].explode = true;
-            setGameOver(true)
-            setResultBanner(true);
+            gameFinished.current = true;
+            setBannerResult(true)
             setBannerResultTitle("GAME OVER")
             setBannerResultSimbol("😟")
-            console.log("Mine pressed , Game over")
             return
         }
 
@@ -162,10 +159,18 @@ export const MineSweeperPage = () => {
     }
 
     const pressSquare = (indexRow, indexColumn) => {
-        if(gameOver){return}
+        if (gameFinished.current) { return }
         boardAux.current = structuredClone(board);
         revealSquare({ row: indexRow, column: indexColumn });
         setBoard(boardAux.current);
+        if (!gameFinished.current) {
+            if (verifyVictory(boardAux.current)) {
+                setBannerResult(true)
+                setBannerResultSimbol("🥳")
+                gameFinished.current = true;
+                setBannerResultTitle("VICTORY !!!")
+            }
+        }
     }
 
     const borderSquares = ({ row, column }) => {
@@ -181,17 +186,38 @@ export const MineSweeperPage = () => {
     };
 
     const layFlag = (indexRow, indexColumn) => {
-        if(gameOver){return}
-        if (board[indexRow][indexColumn].status == MARKS.HIDE) {
+        if (gameFinished.current) { return }
+        if (board[indexRow][indexColumn].status === MARKS.HIDE) {
             let newBoard = structuredClone(board)
+            let auxFlag = newBoard[indexRow][indexColumn].flag ? 1 : -1;
             newBoard[indexRow][indexColumn].flag = !newBoard[indexRow][indexColumn].flag
             setBoard(newBoard)
+            setAvailableFlags(availableFlags + auxFlag);
         }
     }
 
-    const gameOverBanner = () =>{
-        console.log("GAME OVER !!!!!!!!!!!!!!!!")
-        return
+    const verifyVictory = (board) => {
+        for (let r = 0; r < board.length; r++) {
+            for (let c = 0; c < board.length; c++) {
+                if (board[r][c].status === MARKS.HIDE && board[r][c].content !== MARKS.MINE) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    const resetGame = () => {
+        console.log("reset!!!!!!!!!")
+        boardAux.current = null
+        gameFinished.current = false
+        setMinesCount(Math.floor(rows * columns * difficultySelected))
+        setBoard(null)
+        setAvailableFlags(0)
+        setBannerResult(false)
+        setBannerResultTitle("")
+        setBannerResultSimbol("")
+        placeMines()
     }
 
 
@@ -213,10 +239,10 @@ export const MineSweeperPage = () => {
             <div className="boardContainer">
                 <div className="headerBoard">
                     <div className="flagsSign">
-                        <p>{minesCount}</p>
+                        <p>{availableFlags}</p>
                     </div>
 
-                    <div className="faceSign">
+                    <div className="faceSign" onClick={resetGame}>
                         <p >😎</p>
                     </div>
 
@@ -228,7 +254,7 @@ export const MineSweeperPage = () => {
                 </div>
                 <div className="boardMineSweeper">
                     {
-                        board.map((elementRow, indexRow) => {
+                        board ? board.map((elementRow, indexRow) => {
                             return (
                                 <div key={`row-${indexRow}`} className="row">
                                     {
@@ -248,12 +274,12 @@ export const MineSweeperPage = () => {
                                     }
                                 </div>
                             )
-                        })
+                        }) : ""
                     }
                 </div>
             </div>
 
-            <ResulBanner title = {bannerResultTitle} simbol = {bannerResultSimbol}  visibleBanner = {bannerResult}  setVisibleBanner = {setResultBanner} ></ResulBanner>
+            <ResulBanner title={bannerResultTitle} simbol={bannerResultSimbol} visibleBanner={bannerResult} setVisibleBanner={setBannerResult} ></ResulBanner>
 
             <Footer></Footer>
         </>

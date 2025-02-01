@@ -51,6 +51,7 @@
 }
 .headerBoard .faceSign p{
     font-size: 30px;
+    cursor: pointer;
 }
 
 .boardMineSweeper {
