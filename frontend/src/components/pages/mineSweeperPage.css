@@ -171,3 +171,39 @@
     background-repeat: no-repeat;
 }
 
+
+.settingsMineSweeper{
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    margin: 10px auto;
+}
+
+.settingsMineSweeper .title p{
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    padding-bottom: 7px;
+    border-bottom: 1px solid white;
+    cursor: pointer;
+}
+.settingsMineSweeper .content{
+    height: 0px;
+    overflow: hidden;
+    transition: all 1ps ease-out;
+}
+
+.settingsMineSweeper .content.visible{
+    height: auto;
+    overflow: hidden;
+}
+
+
+.settingsForm{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-top: 20px;
+}

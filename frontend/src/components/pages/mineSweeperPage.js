@@ -25,8 +25,8 @@ export const MineSweeperPage = () => {
     const gameFinished = useRef(false);
 
     const [difficultySelected, setDifficultySelected] = useState(DIFFICULTY.EASY)
-    const [rows, setRows] = useState(10)
-    const [columns, setColumns] = useState(10)
+    const [rows, setRows] = useState(30)
+    const [columns, setColumns] = useState(30)
     const [minesCount, setMinesCount] = useState(Math.floor(rows * columns * difficultySelected))
     const [board, setBoard] = useState(null)
     const [availableFlags, setAvailableFlags] = useState(0);
@@ -220,6 +220,14 @@ export const MineSweeperPage = () => {
         placeMines()
     }
 
+    const settingVisibility = () => {
+        document.querySelector(".settingsMineSweeper .content").classList.toggle("visible")
+            ?
+            document.querySelector(".settingsMineSweeper .title p").textContent = "🔽 Settings"
+            :
+            document.querySelector(".settingsMineSweeper .title p").textContent = "▶ Settings"
+    }
+
 
     return (
         <>
@@ -228,6 +236,36 @@ export const MineSweeperPage = () => {
             </Header>
 
             <MainTitle title="MineSweeper Game"></MainTitle>
+
+            <div className="settingsMineSweeper">
+                <div className="title" onClick={() => { settingVisibility() }}>
+                    <p>▶ Settings</p>
+                </div>
+                <div className="content">
+                    <form className="settingsForm" onSubmit={() => { }}>
+
+                        <label htmlFor="">Difficulty: </label>
+                        <select name="" id="">
+                            <option>Beginner</option>
+                            <option>Intermediate</option>
+                            <option>Expert</option>
+                        </select>
+
+                        <label htmlFor="">Dimentions: </label>
+                        <select>
+                            <option>10 x 10</option>
+                            <option>20 x 20</option>
+                            <option>30 x 30</option>
+                            <option>40 x 40</option>
+
+                        </select>
+                    </form>
+                </div>
+            </div>
+
+
+
+
 
             <p>Mines: {minesCount} </p>
             <p>Board: [{rows} - {columns} ] ({rows * columns})</p>
