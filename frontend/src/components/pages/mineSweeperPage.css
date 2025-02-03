@@ -1,11 +1,11 @@
-@font-face{
+@font-face {
     font-family: "Digital1";
     src: url("../../fonts/Digital1.ttf");
     font-weight: normal;
     font-style: normal;
 }
 
-@font-face{
+@font-face {
     font-family: "shlop";
     src: url("../../fonts/shlop.ttf")
 }
@@ -46,10 +46,11 @@
     padding: 10px 15px;
 }
 
-.headerBoard p{
+.headerBoard p {
     font-size: 47px;
 }
-.headerBoard .faceSign p{
+
+.headerBoard .faceSign p {
     font-size: 30px;
     cursor: pointer;
 }
@@ -172,14 +173,15 @@
 }
 
 
-.settingsMineSweeper{
+.settingsMineSweeper {
     width: fit-content;
     display: flex;
     flex-direction: column;
     margin: 10px auto;
+    
 }
 
-.settingsMineSweeper .title p{
+.settingsMineSweeper .title p {
     color: white;
     font-size: 17px;
     font-weight: bold;
@@ -187,19 +189,29 @@
     border-bottom: 1px solid white;
     cursor: pointer;
 }
-.settingsMineSweeper .content{
-    height: 0px;
+
+.settingsMineSweeper .content {
     overflow: hidden;
-    transition: all 1ps ease-out;
+    position: relative;
+    height: 70px;
+    width: 500px;
 }
 
-.settingsMineSweeper .content.visible{
+.settingsMineSweeper .content form{
+    transition: top 0.5s ease-out, opacity  1s ease-in-out;
+    position: absolute;
+    top: -100%;
+    opacity: 0;
+}
+
+.settingsMineSweeper .content.visible form {
     height: auto;
-    overflow: hidden;
+    top: 0;
+    opacity: 1;
 }
 
 
-.settingsForm{
+.settingsForm {
     display: flex;
     flex-direction: row;
     justify-content: center;

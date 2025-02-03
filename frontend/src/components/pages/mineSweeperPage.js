@@ -16,17 +16,18 @@ export const MineSweeperPage = () => {
     }
 
     const DIFFICULTY = { // [rows x columns] % percent
-        EASY: 0.10,
+        BEGINNER: 0.10,
         INTERMEDIATE: 0.25,
-        HARD: 0.35
+        EXPERT: 0.35
     }
 
     var boardAux = useRef(null)
     const gameFinished = useRef(false);
 
-    const [difficultySelected, setDifficultySelected] = useState(DIFFICULTY.EASY)
-    const [rows, setRows] = useState(30)
-    const [columns, setColumns] = useState(30)
+
+    const [difficultySelected, setDifficultySelected] = useState(DIFFICULTY.BEGINNER)
+    const [rows, setRows] = useState(10)
+    const [columns, setColumns] = useState(10)
     const [minesCount, setMinesCount] = useState(Math.floor(rows * columns * difficultySelected))
     const [board, setBoard] = useState(null)
     const [availableFlags, setAvailableFlags] = useState(0);
@@ -47,9 +48,9 @@ export const MineSweeperPage = () => {
         return res
     }
 
-    const placeMines = () => {
-        let newBoard = new Array(rows).fill(null).map(() => {
-            return new Array(columns).fill(null).map(element => {
+    const placeMines = (numRows, numColums, mines) => {
+        let newBoard = new Array(numRows).fill(null).map(() => {
+            return new Array(numColums).fill(null).map(element => {
                 return {
                     status: MARKS.HIDE,
                     content: "",
@@ -59,14 +60,14 @@ export const MineSweeperPage = () => {
             })
         })
         let minesLaid = 0;
-        for (let i = 0; i < minesCount; i++) {
+        for (let i = 0; i < mines; i++) {
             let availablePositions = availableSquares(newBoard);
             if (availablePositions.length > 0) {
                 let pos = availablePositions[Math.floor(Math.random() * availablePositions.length)]
                 newBoard[pos.row][pos.column].content = MARKS.MINE;
                 minesLaid++;
             } else {
-                console.log(`${minesLaid} mines laid in a board of ${rows}x${columns} (${rows * columns})`)
+                console.log(`${minesLaid} mines laid in a board of ${numRows}x${numColums} (${numRows * numColums})`)
                 setMinesCount(minesLaid)
             }
         }
@@ -75,7 +76,7 @@ export const MineSweeperPage = () => {
     }
 
     useEffect(() => {
-        placeMines()
+        placeMines(rows, columns, minesCount)
     }, [])
 
     const getClassNameSquare = (square) => {
@@ -207,17 +208,20 @@ export const MineSweeperPage = () => {
         return true;
     }
 
-    const resetGame = () => {
+    const resetGame = (numRows = 10, numColums = 10, difficulty = DIFFICULTY.BEGINNER) => {
         console.log("reset!!!!!!!!!")
         boardAux.current = null
         gameFinished.current = false
-        setMinesCount(Math.floor(rows * columns * difficultySelected))
+        setRows(numRows)
+        setColumns(numColums)
+        setDifficultySelected(difficulty)
+        setMinesCount(Math.floor(numRows * numColums * difficulty))
         setBoard(null)
         setAvailableFlags(0)
         setBannerResult(false)
         setBannerResultTitle("")
         setBannerResultSimbol("")
-        placeMines()
+        placeMines(numRows, numColums, Math.floor(numRows * numColums * difficulty))
     }
 
     const settingVisibility = () => {
@@ -245,18 +249,25 @@ export const MineSweeperPage = () => {
                     <form className="settingsForm" onSubmit={() => { }}>
 
                         <label htmlFor="">Difficulty: </label>
-                        <select name="" id="">
-                            <option>Beginner</option>
-                            <option>Intermediate</option>
-                            <option>Expert</option>
+                        <select name="" id="" onChange={(e) => {
+                            console.log( DIFFICULTY[e.target.value])
+                            resetGame(rows, columns, DIFFICULTY[e.target.value])
+
+                        }}>
+                            <option value="BEGINNER" >Beginner</option>
+                            <option value="INTERMEDIATE">Intermediate</option>
+                            <option value="EXPERT">Expert</option>
+
                         </select>
 
-                        <label htmlFor="">Dimentions: </label>
-                        <select>
-                            <option>10 x 10</option>
-                            <option>20 x 20</option>
-                            <option>30 x 30</option>
-                            <option>40 x 40</option>
+                        <label htmlFor=""  >Dimentions: </label>
+                        <select onChange={(e) => {
+                            resetGame(parseInt(e.target.value), parseInt(e.target.value), difficultySelected)
+                        }}>
+                            <option value="10"  >10 x 10</option>
+                            <option value="20"  >20 x 20</option>
+                            <option value="30"  >30 x 30</option>
+                            <option value="40"  >40 x 40</option>
 
                         </select>
                     </form>
