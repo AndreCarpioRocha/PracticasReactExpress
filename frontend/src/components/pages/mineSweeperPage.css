@@ -219,3 +219,37 @@
     gap: 30px;
     margin-top: 20px;
 }
+
+.infoGameBanner{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.infoGameBanner .info {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 15px;
+    border: 1px solid white;
+    border-radius: 10px;
+    width: 140px;
+    height:90px;
+}
+
+.infoGameBanner .info .title{
+    font-size: 18px;
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.infoGameBanner .info .content{
+    font-size: 17px;
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+}

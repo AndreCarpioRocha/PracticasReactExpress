@@ -241,6 +241,8 @@ export const MineSweeperPage = () => {
 
             <MainTitle title="MineSweeper Game"></MainTitle>
 
+            
+
             <div className="settingsMineSweeper">
                 <div className="title" onClick={() => { settingVisibility() }}>
                     <p>▶ Settings</p>
@@ -250,7 +252,7 @@ export const MineSweeperPage = () => {
 
                         <label htmlFor="">Difficulty: </label>
                         <select name="" id="" onChange={(e) => {
-                            console.log( DIFFICULTY[e.target.value])
+                            console.log(DIFFICULTY[e.target.value])
                             resetGame(rows, columns, DIFFICULTY[e.target.value])
 
                         }}>
@@ -274,24 +276,30 @@ export const MineSweeperPage = () => {
                 </div>
             </div>
 
+            <div className="infoGameBanner">
+                <div className="info">
+                        <p className="title">Board</p>
+                        <p className="content">{rows} x {columns}</p>
+                </div>
+                <div className="info">
+                        <p className="title">Mines</p>
+                        <p className="content">{minesCount}</p>
+                </div>
+                <div className="info">
+                        <p className="title">Difficulty</p>
+                        <p className="content">{difficultySelected * 100}%</p>
+                </div>
+            </div>
 
 
-
-
-            <p>Mines: {minesCount} </p>
-            <p>Board: [{rows} - {columns} ] ({rows * columns})</p>
-            <p>Difficulty: {difficultySelected * 100}% mines</p>
-
-
-
-
+        
             <div className="boardContainer">
                 <div className="headerBoard">
                     <div className="flagsSign">
                         <p>{availableFlags}</p>
                     </div>
 
-                    <div className="faceSign" onClick={resetGame}>
+                    <div className="faceSign" onClick={() => { resetGame(rows, columns, difficultySelected) }}>
                         <p >😎</p>
                     </div>
 
