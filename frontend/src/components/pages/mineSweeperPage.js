@@ -23,6 +23,7 @@ export const MineSweeperPage = () => {
 
     var boardAux = useRef(null)
     const gameFinished = useRef(false);
+    const gameOver = useRef(false)
 
 
     const [difficultySelected, setDifficultySelected] = useState(DIFFICULTY.BEGINNER)
@@ -43,7 +44,6 @@ export const MineSweeperPage = () => {
         stopTime()
         setSeconds(0)
         idLastSetInterval.current = setInterval(() => {
-            console.log("ejecutanto set Interval")
             setSeconds(priorElement => {
                 return priorElement + 1
             })
@@ -150,6 +150,7 @@ export const MineSweeperPage = () => {
 
             boardAux.current[row][column].explode = true;
             gameFinished.current = true;
+            gameOver.current = true;
             setBannerResult(true)
             setBannerResultTitle("GAME OVER")
             setBannerResultSimbol("😟")
@@ -237,6 +238,7 @@ export const MineSweeperPage = () => {
         console.log("reset!!!!!!!!!")
         boardAux.current = null
         gameFinished.current = false
+        gameOver.current = false
         setRows(numRows)
         setColumns(numColums)
         setDifficultySelected(difficulty)
@@ -332,7 +334,13 @@ export const MineSweeperPage = () => {
                     </div>
 
                     <div className="faceSign" onClick={() => { resetGame(rows, columns, difficultySelected) }}>
-                        <p >😎</p>
+                        <p >{
+                            gameFinished.current ?
+                                gameOver.current ?
+                                    "😟" :
+                                    "🥳"
+                                : "😎"
+                        }</p>
                     </div>
 
                     <div className="timer">

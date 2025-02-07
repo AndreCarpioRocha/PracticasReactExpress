@@ -53,6 +53,11 @@
 .headerBoard .faceSign p {
     font-size: 30px;
     cursor: pointer;
+    transition: scale 0.1s ease-in-out;
+}
+
+.headerBoard .faceSign p:hover {
+    scale: 1.2;
 }
 
 .boardMineSweeper {
