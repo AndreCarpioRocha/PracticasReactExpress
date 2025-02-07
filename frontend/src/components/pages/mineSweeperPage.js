@@ -36,6 +36,26 @@ export const MineSweeperPage = () => {
     const [bannerResultTitle, setBannerResultTitle] = useState("")
     const [bannerResultSimbol, setBannerResultSimbol] = useState("")
 
+    const [seconds, setSeconds] = useState(0);
+    const idLastSetInterval = useRef(null);
+
+    const resetTime = () => {
+        stopTime()
+        setSeconds(0)
+        idLastSetInterval.current = setInterval(() => {
+            console.log("ejecutanto set Interval")
+            setSeconds(priorElement => {
+                return priorElement + 1
+            })
+        }, 1000)
+    }
+
+    const stopTime = () => {
+        if (idLastSetInterval.current) {
+            clearInterval(idLastSetInterval.current);
+        }
+    }
+
     const availableSquares = (board) => {
         let res = []
         for (let row = 0; row < board.length; row++) {
@@ -77,6 +97,7 @@ export const MineSweeperPage = () => {
 
     useEffect(() => {
         placeMines(rows, columns, minesCount)
+        resetTime()
     }, [])
 
     const getClassNameSquare = (square) => {
@@ -172,6 +193,10 @@ export const MineSweeperPage = () => {
                 setBannerResultTitle("VICTORY !!!")
             }
         }
+
+        if (gameFinished.current) {
+            stopTime()
+        }
     }
 
     const borderSquares = ({ row, column }) => {
@@ -222,6 +247,7 @@ export const MineSweeperPage = () => {
         setBannerResultTitle("")
         setBannerResultSimbol("")
         placeMines(numRows, numColums, Math.floor(numRows * numColums * difficulty))
+        resetTime()
     }
 
     const settingVisibility = () => {
@@ -232,6 +258,12 @@ export const MineSweeperPage = () => {
             document.querySelector(".settingsMineSweeper .title p").textContent = "▶ Settings"
     }
 
+    const getFormatTime = () => {
+        const auxMinutes = Math.floor(seconds / 60).toString().padStart(2, "0");
+        const auxSeconds = (seconds % 60).toString().padStart(2, "0");
+        return `${auxMinutes}:${auxSeconds}`;
+    }
+
 
     return (
         <>
@@ -239,9 +271,9 @@ export const MineSweeperPage = () => {
 
             </Header>
 
-            <MainTitle title="MineSweeper Game"></MainTitle>
+            <MainTitle title="🕵️‍♂️ MineSweeper Game"></MainTitle>
 
-            
+
 
             <div className="settingsMineSweeper">
                 <div className="title" onClick={() => { settingVisibility() }}>
@@ -278,21 +310,21 @@ export const MineSweeperPage = () => {
 
             <div className="infoGameBanner">
                 <div className="info">
-                        <p className="title">Board</p>
-                        <p className="content">{rows} x {columns}</p>
+                    <p className="title">Board</p>
+                    <p className="content">{rows} x {columns}</p>
                 </div>
                 <div className="info">
-                        <p className="title">Mines</p>
-                        <p className="content">{minesCount}</p>
+                    <p className="title">Mines</p>
+                    <p className="content">{minesCount}</p>
                 </div>
                 <div className="info">
-                        <p className="title">Difficulty</p>
-                        <p className="content">{difficultySelected * 100}%</p>
+                    <p className="title">Difficulty</p>
+                    <p className="content">{difficultySelected * 100}%</p>
                 </div>
             </div>
 
 
-        
+
             <div className="boardContainer">
                 <div className="headerBoard">
                     <div className="flagsSign">
@@ -305,7 +337,7 @@ export const MineSweeperPage = () => {
 
                     <div className="timer">
                         <p>
-                            00:00
+                            {getFormatTime()}
                         </p>
                     </div>
                 </div>
